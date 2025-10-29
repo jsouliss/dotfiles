@@ -1,4 +1,9 @@
-return {
-	-- ...your existing config
-	color_scheme = "Catppuccin Mocha", -- or Macchiato, Frappe, Latte
+local wezterm = require 'wezterm'
+
+local config = {
+	font = wezterm.font "MesloLGS Nerd Font Regular",
+	font_size = 10,
+	color_scheme = "Catppuccin Mocha"
 }
+
+return config
