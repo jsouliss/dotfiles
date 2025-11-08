@@ -15,5 +15,13 @@ config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 config.window_background_opacity = 0.8
 config.macos_window_background_blur = 10
 
+-- Window padding configuration.
+config.window_padding = {
+	left = 0,
+	right = 0,
+	top = 55,
+	bottom = 0,
+}
+
 -- Finally, return the configuration to wezterm:
 return config
