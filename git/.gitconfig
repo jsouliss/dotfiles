@@ -1,0 +1,15 @@
+[user]
+    name = Gerardo Solis
+    email = gsolis5114@gmail.com
+
+[core]
+    editor = nvim
+    pager = delta
+
+[delta]
+    navigate = true
+    side-by-side = true
+    line-numbers = true
+
+[init]
+    defaultBranch = main
