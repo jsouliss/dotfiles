@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# -- Right Side Item -- 
+sketchybar --add item volume right \
+           --set volume script="$PLUGIN_DIR/volume.sh" \
+           --subscribe volume volume_change
