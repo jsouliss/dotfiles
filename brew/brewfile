@@ -4,7 +4,6 @@ tap "hashicorp/tap"
 tap "homebrew/services"
 tap "jeffreywildman/virt-manager"
 tap "nikitabobko/tap"
-tap "powershell/tap"
 tap "romkatv/powerlevel10k"
 tap "runpod/runpodctl"
 brew "openssl@3"
@@ -66,6 +65,7 @@ brew "libffi"
 brew "libvirt", restart_service: :changed
 brew "llvm"
 brew "lld"
+brew "mas"
 brew "ninja"
 brew "meson"
 brew "mingw-w64"
@@ -126,7 +126,6 @@ brew "felixkratz/formulae/borders"
 brew "felixkratz/formulae/sketchybar"
 brew "hashicorp/tap/terraform"
 brew "jeffreywildman/virt-manager/virt-viewer"
-brew "powershell/tap/powershell"
 brew "runpod/runpodctl/runpodctl"
 cask "aerospace"
 cask "claude-code"
@@ -144,6 +143,14 @@ cask "sf-symbols"
 cask "warp"
 cask "x2goclient"
 cask "xquartz"
+mas "Dashlane", id: 517914548
+mas "Goodnotes", id: 1444383602
+mas "Microsoft Outlook", id: 985367838
+mas "Pieoneer", id: 6739781207
+mas "The Unarchiver", id: 425424353
+mas "Things", id: 904280696
+mas "Windows App", id: 1295203466
+mas "WireGuard", id: 1451685025
 vscode "anthropic.claude-code"
 vscode "anysphere.cursorpyright"
 vscode "anysphere.remote-containers"
