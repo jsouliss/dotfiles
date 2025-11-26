@@ -1,6 +1,6 @@
-#!/bin/bash 
+#!/bin/bash
 
-# Custom config 
+# Custom config
 source "$CONFIG_DIR/colors.sh"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 ITEM_DIR="$CONFIG_DIR/items"
@@ -12,26 +12,31 @@ ITEM_DIR="$CONFIG_DIR/items"
 # The color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar position=top height=35 blur_radius=30 color=$BAR_COLOR
+sketchybar --bar position=top \ 
+height=35 \ 
+blur_radius=30 \ 
+color=$BAR_COLOR \ 
+topmost=window \ 
+sticky=on
 
 ##### Changing Defaults #####
 # For a full list of all available item properties see:
 # https://felixkratz.github.io/SketchyBar/config/items
 
 default=(
-  padding_left=5
-  padding_right=5
-  icon.font="SF Pro:Semibold:14.0"
-  label.font="SF Pro:Semibold:14.0"
-  icon.color=$WHITE
-  label.color=$WHITE
-  background.color=$ITEM_BG_COLOR
-  background.corner_radius=5
-  background.height=24
-  icon.padding_left=10
-  icon.padding_right=10
-  label.padding_left=4
-  label.padding_right=4
+    padding_left=5
+    padding_right=5
+    icon.font="SF Pro:Semibold:14.0"
+    label.font="SF Pro:Semibold:14.0"
+    icon.color=$WHITE
+    label.color=$WHITE
+    background.color=$ITEM_BG_COLOR
+    background.corner_radius=5
+    background.height=24
+    icon.padding_left=10
+    icon.padding_right=10
+    label.padding_left=4
+    label.padding_right=4
 )
 sketchybar --default "${default[@]}"
 
