@@ -29,10 +29,11 @@ source $ZSH/oh-my-zsh.sh
 # ============================================
 # PATH EXPORTS
 # ============================================
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-export PATH="$PATH:/Users/jerrysolis/.local/bin"
-export DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH
-export DISPLAY=:0
+# export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+# export PATH="$PATH:/Users/jerrysolis/.local/bin"
+# export DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH
+# export DISPLAY=:0
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 # ============================================
 # COMPLETIONS
@@ -58,7 +59,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 # MODERN CLI TOOLS
 # ============================================
 # bat (better cat with syntax highlighting)
-alias cat="bat"
+alias cat="batcat"
 
 # eza (better ls with icons and git integration)
 alias ls="eza --icons --git"
@@ -74,7 +75,7 @@ alias cd="z"
 alias grep="rg"
 
 # fd (better find)
-alias find="fd"
+alias find="fdfind"
 
 # procs (better ps)
 alias ps="procs"
@@ -98,11 +99,12 @@ alias df="duf"
 fastfetch
 
 # Syntax highlighting (must be near the end)
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /home/dev/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # Auto-suggestions (must be at the end)
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
+# source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # ============================================
 # CUSTOM ALIASES
 # ============================================
@@ -139,3 +141,9 @@ SAVEHIST=10000
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_FIND_NO_DUPS
 setopt SHARE_HISTORY
+
+[[ -s "/home/dev/.gvm/scripts/gvm" ]] && source "/home/dev/.gvm/scripts/gvm"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
