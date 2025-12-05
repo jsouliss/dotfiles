@@ -1,4 +1,5 @@
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+export TERM=xterm-256color
 
 # ============================================
 # POWERLEVEL10K INSTANT PROMPT
@@ -36,15 +37,32 @@ source $ZSH/oh-my-zsh.sh
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 # ============================================
+# PAGER CONFIGURATION
+# ============================================
+export PAGER="less"
+export LESSCHARSET=utf-8
+export LESS="-r -F -X -i"
+
+# ============================================
 # COMPLETIONS
 # ============================================
+# To activate completions for zsh you need to have
+# bashcompinit enabled in zsh:
+
+autoload -U bashcompinit
+bashcompinit
+
+# Afterwards you can enable completion for pipx:
+
+eval "$(register-python-argcomplete pipx)"
+
 autoload -Uz compinit && compinit
 
 # Docker CLI completions
 fpath=(/Users/jerrysolis/.docker/completions $fpath)
 
 # Exegol completions
-eval "$(register-python-argcomplete --no-defaults exegol)"
+# eval "$(register-python-argcomplete --no-defaults exegol)"
 
 # ============================================
 # THEME & PROMPT
@@ -78,13 +96,16 @@ alias grep="rg"
 alias find="fdfind"
 
 # procs (better ps)
-alias ps="procs"
+alias ps="procs --tree"
 
 # dust (better du)
 alias du="dust"
 
 # duf (better df)
 alias df="duf"
+
+# tldr (better man)
+alias man="tldr"
 
 # ============================================
 # FZF (FUZZY FINDER)
@@ -98,13 +119,21 @@ alias df="duf"
 # Show system info on startup
 fastfetch
 
+# Disable autocomplete menus
+setopt NO_AUTO_MENU
+setopt MENU_COMPLETE
+zstyle ':completion:*' menu select
+
 # Syntax highlighting (must be near the end)
 # source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /home/dev/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# source /home/dev/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # Auto-suggestions (must be at the end)
 # source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+ZSH_AUTOSUGGEST_USE_ASYNC=true
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 # ============================================
 # CUSTOM ALIASES
 # ============================================
@@ -147,3 +176,6 @@ setopt SHARE_HISTORY
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Created by `pipx` on 2025-12-05 15:12:54
+export PATH="$PATH:/home/dev/.local/bin"
