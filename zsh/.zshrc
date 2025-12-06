@@ -35,6 +35,8 @@ source $ZSH/oh-my-zsh.sh
 # export DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH
 # export DISPLAY=:0
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
 
 # ============================================
 # PAGER CONFIGURATION
@@ -77,6 +79,9 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 # MODERN CLI TOOLS
 # ============================================
 # bat (better cat with syntax highlighting)
+# macos
+# alias cat="bat"
+# linux
 alias cat="batcat"
 
 # eza (better ls with icons and git integration)
