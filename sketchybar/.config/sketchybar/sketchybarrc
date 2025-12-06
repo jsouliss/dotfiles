@@ -12,11 +12,11 @@ ITEM_DIR="$CONFIG_DIR/items"
 # The color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar position=top \ 
-height=35 \ 
-blur_radius=30 \ 
-color=$BAR_COLOR \ 
-topmost=window \ 
+sketchybar --bar position=top \
+height=35 \
+blur_radius=30 \
+color=$BAR_COLOR \
+topmost=window \
 sticky=on
 
 ##### Changing Defaults #####
