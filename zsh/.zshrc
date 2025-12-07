@@ -30,11 +30,11 @@ source $ZSH/oh-my-zsh.sh
 # ============================================
 # PATH EXPORTS
 # ============================================
-# export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-# export PATH="$PATH:/Users/jerrysolis/.local/bin"
-# export DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH
-# export DISPLAY=:0
-export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+export PATH="$PATH:/Users/jerrysolis/.local/bin"
+export DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH
+export DISPLAY=:0
+# export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 # ============================================
 # PAGER CONFIGURATION
@@ -62,7 +62,7 @@ autoload -Uz compinit && compinit
 fpath=(/Users/jerrysolis/.docker/completions $fpath)
 
 # Exegol completions
-# eval "$(register-python-argcomplete --no-defaults exegol)"
+eval "$(register-python-argcomplete --no-defaults exegol)"
 
 # ============================================
 # THEME & PROMPT
@@ -77,7 +77,7 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 # MODERN CLI TOOLS
 # ============================================
 # bat (better cat with syntax highlighting)
-alias cat="batcat"
+alias cat="bat"
 
 # eza (better ls with icons and git integration)
 alias ls="eza --icons --git"
@@ -85,15 +85,18 @@ alias ll="eza --icons --git -lah"
 alias la="eza --icons --git -a"
 alias tree="eza --tree"
 
+# gvm config 
+unalias cd 2>/dev/null
+[[ -s "/Users/jerrysolis/.gvm/scripts/gvm" ]] && source "/Users/jerrysolis/.gvm/scripts/gvm"
+
 # zoxide (better cd with frecency)
-eval "$(zoxide init zsh)"
-alias cd="z"
+eval "$(zoxide init zsh --cmd cd)"
 
 # ripgrep (better grep)
 alias grep="rg"
 
 # fd (better find)
-alias find="fdfind"
+alias find="fd"
 
 # procs (better ps)
 alias ps="procs --tree"
@@ -111,13 +114,13 @@ alias man="tldr"
 # FZF (FUZZY FINDER)
 # ============================================
 # Uncomment after installing fzf: brew install fzf
-# eval "$(fzf --zsh)"
+eval "$(fzf --zsh)"
 
 # ============================================
 # SHELL ENHANCEMENTS
 # ============================================
 # Show system info on startup
-fastfetch
+fastfetch --kitty-direct .config/kitty/Nerv.png --logo-width 25 --logo-height 15 --logo-padding-top 2 --logo-padding-left 1 --logo-padding-right 1
 
 # Disable autocomplete menus
 setopt NO_AUTO_MENU
@@ -125,14 +128,13 @@ setopt MENU_COMPLETE
 zstyle ':completion:*' menu select
 
 # Syntax highlighting (must be near the end)
-# source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # source /home/dev/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # Auto-suggestions (must be at the end)
-# source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # ============================================
 # CUSTOM ALIASES
@@ -170,8 +172,6 @@ SAVEHIST=10000
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_FIND_NO_DUPS
 setopt SHARE_HISTORY
-
-[[ -s "/home/dev/.gvm/scripts/gvm" ]] && source "/home/dev/.gvm/scripts/gvm"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
