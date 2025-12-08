@@ -80,11 +80,9 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 # MODERN CLI TOOLS
 # ============================================
 # bat (better cat with syntax highlighting)
-<<<<<<< HEAD
-alias cat="bat"
-=======
 # macos
 alias cat="bat"
+
 # linux
 # alias cat="batcat"
 
