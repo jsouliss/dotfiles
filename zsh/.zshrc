@@ -211,6 +211,7 @@ if [[ "$(uname)" == "Linux" ]]; then
     export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
     # Created by `pipx` on 2025-12-05 15:12:54
     export PATH="$PATH:$HOME/.local/bin"
+    export PATH="$PATH:$HOME/.local/kitty.app/bin"
 
     # Custom Aliases
     # bat (better cat with syntax highlighting)
