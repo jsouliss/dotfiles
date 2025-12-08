@@ -84,10 +84,9 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 alias cat="bat"
 =======
 # macos
-# alias cat="bat"
+alias cat="bat"
 # linux
-alias cat="batcat"
->>>>>>> e26447fe02ab2c3b85ca9f0beba5604038579121
+# alias cat="batcat"
 
 # eza (better ls with icons and git integration)
 alias ls="eza --icons --git"
