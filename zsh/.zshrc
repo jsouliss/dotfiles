@@ -28,18 +28,6 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # ============================================
-# PATH EXPORTS
-# ============================================
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-export PATH="$PATH:/Users/jerrysolis/.local/bin"
-export DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH
-export DISPLAY=:0
-
-# export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
-# export DOTNET_ROOT="$HOME/.dotnet"
-# export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
-
-# ============================================
 # PAGER CONFIGURATION
 # ============================================
 export PAGER="less"
@@ -62,7 +50,7 @@ eval "$(register-python-argcomplete pipx)"
 autoload -Uz compinit && compinit
 
 # Docker CLI completions
-fpath=(/Users/jerrysolis/.docker/completions $fpath)
+fpath=($HOME/.docker/completions $fpath)
 
 # Exegol completions
 eval "$(register-python-argcomplete --no-defaults exegol)"
@@ -79,49 +67,44 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 # ============================================
 # MODERN CLI TOOLS
 # ============================================
-# bat (better cat with syntax highlighting)
-# macos
-alias cat="bat"
 
-# linux
-# alias cat="batcat"
+if command -v eza &> /dev/null; then 
+  # eza (better ls with icons and git integration)
+  alias ls="eza --icons --git"
+  alias ll="eza --icons --git -lah"
+  alias la="eza --icons --git -a"
+  alias tree="eza --tree"
+fi
 
-# eza (better ls with icons and git integration)
-alias ls="eza --icons --git"
-alias ll="eza --icons --git -lah"
-alias la="eza --icons --git -a"
-alias tree="eza --tree"
+if command -v zoxide &> /dev/null; then 
+  # zoxide (better cd with frecency)
+  eval "$(zoxide init zsh --cmd cd)"
+fi
 
-# gvm config 
-unalias cd 2>/dev/null
-[[ -s "/Users/jerrysolis/.gvm/scripts/gvm" ]] && source "/Users/jerrysolis/.gvm/scripts/gvm"
+if command -v rg &> /dev/null; then 
+  # ripgrep (better grep)
+  alias grep="rg"
+fi
 
-# zoxide (better cd with frecency)
-eval "$(zoxide init zsh --cmd cd)"
+if command -v procs &> /dev/null; then 
+  # procs (better ps)
+  alias ps="procs --tree"
+fi
 
-# ripgrep (better grep)
-alias grep="rg"
+if command -v dust &> /dev/null; then 
+  # dust (better du)
+  alias du="dust"
+fi
 
-# fd (better find)
-alias find="fd"
+if command -v duf &> /dev/null; then 
+  # duf (better df)
+  alias df="duf"
+fi
 
-# procs (better ps)
-alias ps="procs --tree"
-
-# dust (better du)
-alias du="dust"
-
-# duf (better df)
-alias df="duf"
-
-# tldr (better man)
-alias man="tldr"
-
-# ============================================
-# FZF (FUZZY FINDER)
-# ============================================
-# Uncomment after installing fzf: brew install fzf
-eval "$(fzf --zsh)"
+if command -v tldr &> /dev/null; then 
+  # tldr (better man)
+  alias man="tldr"
+fi
 
 # ============================================
 # SHELL ENHANCEMENTS
@@ -133,15 +116,6 @@ fastfetch --kitty-direct .config/kitty/Nerv.png --logo-width 25 --logo-height 15
 setopt NO_AUTO_MENU
 setopt MENU_COMPLETE
 zstyle ':completion:*' menu select
-
-# Syntax highlighting (must be near the end)
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# source /home/dev/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-
-# Auto-suggestions (must be at the end)
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-ZSH_AUTOSUGGEST_USE_ASYNC=true
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
 # ============================================
 # CUSTOM ALIASES
@@ -184,5 +158,101 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Created by `pipx` on 2025-12-05 15:12:54
-export PATH="$PATH:/home/dev/.local/bin"
+# Auto-suggestions (must be at the end)
+ZSH_AUTOSUGGEST_USE_ASYNC=true
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+
+# MACOS
+if [[ "$(uname)" == "Darwin" ]]; then 
+    # ============================================
+    # PATH EXPORTS
+    # ============================================
+    export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+    export PATH="$PATH:$HOME/.local/bin"
+    export DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH
+    export DISPLAY=:0
+
+    # ============================================
+    # FZF (FUZZY FINDER)
+    # ============================================
+    # Uncomment after installing fzf: brew install fzf
+    eval "$(fzf --zsh)"
+
+    # Modern CLI Tools
+    # gvm config 
+    unalias cd 2>/dev/null
+    [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+
+    # Custom Aliases
+    # bat (better cat with syntax highlighting)
+    if command -v bat &> /dev/null; then 
+      alias cat="bat"
+    fi
+
+    if command -v fd &> /dev/null; then 
+      # fd (better find)
+      alias find="fd"
+    fi
+
+    # Syntax highlighting (must be near the end)
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+    # Auto-suggestions (must be at the end)
+    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+# LINUX
+if [[ "$(uname)" == "Linux" ]]; then 
+    # ============================================
+    # PATH EXPORTS
+    # ============================================
+    export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+    export DOTNET_ROOT="$HOME/.dotnet"
+    export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
+    # Created by `pipx` on 2025-12-05 15:12:54
+    export PATH="$PATH:$HOME/.local/bin"
+
+    # Custom Aliases
+    # bat (better cat with syntax highlighting)
+    if command -v batcat &> /dev/null; then 
+      alias cat="batcat"
+    fi
+
+    if command -v fdfind &> /dev/null; then 
+      # fd (better find)
+      alias find="fdfind"
+    fi
+
+    source $HOME/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+fi
+
+check_tools() {
+  local tools=("eza" "zoxide" "rg" "procs" "dust" "duf" "tldr")
+  for tool in "${tools[@]}"; do
+    if ! command -v "$tool" &> /dev/null; then
+      echo "$tool is not installed"
+    fi
+  done
+
+  # Linux specific tools
+  if [[ "$(uname)" == "Linux" ]]; then 
+    if ! command -v "batcat" &> /dev/null; then
+      echo "batcat is not installed"
+    fi
+    if ! command -v "fdfind" &> /dev/null; then
+      echo "fdfind is not installed"
+    fi
+  fi
+
+  # MacOS specific tools
+  if [[ "$(uname)" == "Darwin" ]]; then 
+    if ! command -v "bat" &> /dev/null; then
+      echo "bat is not installed"
+    fi
+    if ! command -v "fd" &> /dev/null; then
+      echo "fd is not installed"
+    fi
+  fi
+
+  echo "Tool check complete."
+}
