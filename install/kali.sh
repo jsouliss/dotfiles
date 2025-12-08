@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -e # Exit on any errors
+
+echo "[+] Starting installation"
+
 packages=(
     7zip
     aircrack-ng
@@ -14,7 +18,6 @@ packages=(
     bison
     bluez
     bluez-hcidump
-    brave-browser
     build-essential
     bulk-extractor
     bully
@@ -28,7 +31,6 @@ packages=(
     chntpw
     cifs-utils
     clang
-    code
     commix
     crackmapexec
     creddump7
@@ -42,15 +44,7 @@ packages=(
     cutycapt
     davtest
     dbd
-    dbus
-    dbus-user-session
-    dbus-x11
-    debconf
-    debconf-i18n
-    debian-archive-keyring
-    debianutils
     default-mysql-server
-    diffutils
     dirb
     dirbuster
     dmidecode
@@ -61,8 +55,6 @@ packages=(
     dnsrecon
     dos2unix
     duf
-    e2fsprogs
-    eject
     enum4linux
     enum4linux-ng
     ethtool
@@ -87,10 +79,7 @@ packages=(
     git
     gobuster
     gophish
-    gpgv
     gpp-decrypt
-    grep
-    groff-base
     grub-common
     grub-pc
     gss-ntlmssp
@@ -113,7 +102,6 @@ packages=(
     inetutils-telnet
     intel-microcode
     iodine
-    iputils-ping
     iw
     john
     jq
@@ -130,120 +118,24 @@ packages=(
     kali-themes
     kali-tools-top10
     kismet
-    kitty
     krb5-locales
     laptop-detect
     laudanum
-    lazygit
     lbd
     ldap-utils
-    less
-    libacl1
-    libapparmor1
-    libapt-pkg6.0
-    libargon2-1
-    libattr1
-    libaudit-common
-    libaudit1
-    libblkid1
-    libbpf1
-    libbsd0
-    libbz2-1.0
-    libc-bin
-    libc6
-    libcap-ng0
-    libcap2
-    libcap2-bin
-    libcom-err2
-    libcrypt1
-    libcryptsetup12
-    libdebconfclient0
-    libdevmapper1.02.1
-    libedit2
-    libfdisk1
-    libffi8
-    libgcc-s1
-    libgcrypt20
-    libgmp10
-    libgpg-error0
-    libgssapi-krb5-2
-    libidn2-0
-    libimage-exiftool-perl
-    libip4tc2
-    libjansson4
-    libjson-c5
-    libk5crypto3
-    libkeyutils1
-    libkmod2
-    libkrb5-3
-    libkrb5support0
-    liblocale-gettext-perl
-    liblockfile-bin
-    liblz4-1
-    liblzma-dev
-    liblzma5
-    libmd0
-    libmnl0
-    libmount1
-    libncursesw6
-    libnewt0.52
-    libnftables1
-    libnftnl11
-    libnss-systemd
-    libopenblas0-pthread
-    libp11-kit0
-    libpam-modules
-    libpam-modules-bin
-    libpam-runtime
-    libpam-systemd
-    libpam0g
-    libpcre2-8-0
-    libpopt0
-    libproc2-0
-    libseccomp2
-    libselinux1
-    libsemanage-common
-    libsemanage2
-    libsepol2
-    libslang2
-    libsmartcols1
-    libss2
     libssl-dev
-    libstdc++6
-    libsystemd-shared
-    libsystemd0
-    libtasn1-6
-    libtext-charwidth-perl
-    libtext-iconv-perl
-    libtext-wrapi18n-perl
-    libtinfo6
-    libtirpc-common
-    libudev1
-    libunistring5
-    libuuid1
-    libxfce4ui-utils
-    libxtables12
-    libxxhash0
-    libzstd1
+    liblzma-dev
+    libimage-exiftool-perl
     ligolo-ng
     ligolo-ng-common-binaries
     linux-exploit-suggester
-    linux-image-amd64
-    locales
-    login
     logrotate
-    logsave
     lsof
     macchanger
     magicrescue
-    man-db
-    manpages
     maskprocessor
     masscan
-    mawk
-    media-types
     metasploit-framework
-    mime-support
     mimikatz
     mingw-w64
     minicom
@@ -254,12 +146,7 @@ packages=(
     nasm
     nbtscan
     ncrack
-    ncurses-base
-    ncurses-bin
-    ncurses-term
     neovim
-    neovim-runtime
-    netbase
     netcat-traditional
     netdiscover
     netexec
@@ -271,7 +158,6 @@ packages=(
     ngrep
     nikto
     nmap
-    obsidian
     offsec-awae-python2
     onesixtyone
     openssh-client
@@ -281,7 +167,6 @@ packages=(
     ophcrack-cli
     os-prober
     passing-the-hash
-    passwd
     patator
     patchelf
     pciutils
@@ -290,7 +175,6 @@ packages=(
     peass
     php
     php-mysql
-    php8.4
     pipal
     pipx
     pixiewps
@@ -299,8 +183,6 @@ packages=(
     powershell
     powershell-empire
     powersploit
-    procps
-    procs
     proxychains4
     proxytunnel
     ptunnel
@@ -320,7 +202,6 @@ packages=(
     ranger
     rdate
     rdesktop
-    readline-common
     reaver
     rebind
     recon-ng
@@ -342,7 +223,6 @@ packages=(
     scalpel
     screen
     scrounge-ntfs
-    sed
     sendemail
     shellter
     skipfish
@@ -367,13 +247,8 @@ packages=(
     stow
     stunnel4
     swaks
-    systemd
     systemd-dev
-    systemd-sysv
-    systemd-timesyncd
-    sysvinit-utils
     tango-icon-theme
-    tar
     tasksel
     tcpick
     tcpreplay
@@ -387,19 +262,12 @@ packages=(
     tmux
     tmuxinator
     traceroute
-    tzdata
-    ucf
-    udev
-    udptunnel
-    unix-privesc-check
     unrar
     upx-ucl
     usbutils
-    util-linux
     vboot-kernel-utils
     vboot-utils
     vim
-    vim-common
     vlan
     voiphopper
     vpnc
@@ -409,7 +277,6 @@ packages=(
     webshells
     weevely
     wfuzz
-    wget
     whois
     wifite
     windows-binaries
@@ -449,3 +316,5 @@ sudo apt-get upgrade -y
 sudo apt-get install -y "${packages[@]}"
 sudo apt-get clean -y
 sudo apt-get autoremove -y
+
+echo "[+] Script completed"
