@@ -194,6 +194,15 @@ if [[ "$(uname)" == "Darwin" ]]; then
       alias find="fd"
     fi
 
+    if command -v grc &> /dev/null; then
+      # generic colouriser
+      [[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
+      for cmd in g++ gas head make ld ping6 tail traceroute6 $( ls /opt/homebrew/share/grc ); do
+        cmd="${cmd##*conf.}"
+        type "${cmd}" >/dev/null 2>&1 && alias "${cmd}"="$( which grc ) --colour=auto ${cmd}"
+      done
+    fi
+
     # Syntax highlighting (must be near the end)
     source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -222,6 +231,15 @@ if [[ "$(uname)" == "Linux" ]]; then
     if command -v fdfind &> /dev/null; then 
       # fd (better find)
       alias find="fdfind"
+    fi
+
+    if command -v grc &> /dev/null; then
+      # generic colouriser
+      [[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
+      for cmd in g++ gas head make ld ping6 tail traceroute6 $( ls /usr/share/grc/ ); do
+        cmd="${cmd##*conf.}"
+        type "${cmd}" >/dev/null 2>&1 && alias "${cmd}"="$( which grc ) --colour=auto ${cmd}"
+      done
     fi
 
     source $HOME/zsh-autocomplete/zsh-autocomplete.plugin.zsh
