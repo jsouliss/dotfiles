@@ -218,6 +218,7 @@ if [[ "$(uname)" == "Linux" ]]; then
     export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
     export DOTNET_ROOT="$HOME/.dotnet"
     export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
+    export PATH="$HOME/.cargo/bin:$PATH"
     # Created by `pipx` on 2025-12-05 15:12:54
     export PATH="$PATH:$HOME/.local/bin"
     export PATH="$PATH:$HOME/.local/kitty.app/bin"
@@ -242,7 +243,12 @@ if [[ "$(uname)" == "Linux" ]]; then
       done
     fi
 
-    source $HOME/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+    alias update="sudo apt-get update -y"
+    alias upgrade="sudo apt-get upgrade -y"
+    alias clean="sudo apt-get clean -y"
+    alias autoremove="sudo apt-get autoremove -y"
+
+    # source $HOME/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 fi
 
 check_tools() {
