@@ -222,6 +222,25 @@ if [[ "$(uname)" == "Linux" ]]; then
     # Created by `pipx` on 2025-12-05 15:12:54
     export PATH="$PATH:$HOME/.local/bin"
     export PATH="$PATH:$HOME/.local/kitty.app/bin"
+    export JAVA_HOME=/usr/lib/jvm/jdk-25.0.1+8
+    export PATH=$PATH:$JAVA_HOME/bin
+
+    # JetBrains ToolBox
+    export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/clion/bin"
+    export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/goland/bin"
+    export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/pycharm/bin" 
+    export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/rider/bin"
+    export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/rustrover/bin"
+    export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/webstorm/bin"
+    export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/intellij-idea-ultimate/bin"
+    export ZED_ALLOW_EMULATED_GPU=1
+
+    # mingw aliases
+    alias disassemble="x86_64-w64-mingw32-objdump -rd"
+    alias disassemble-hex="x86_64-w64-mingw32-objdump -s"
+    alias coffparse-reloc="x86_64-w64-mingw32-objdump -r"
+    alias coffparse-all="x86_64-w64-mingw32-objdump -x"
+    alias piclink="x86_64-w64-mingw32-objcopy --dump-section .text=out.bin"
 
     # Custom Aliases
     # bat (better cat with syntax highlighting)
@@ -247,6 +266,9 @@ if [[ "$(uname)" == "Linux" ]]; then
     alias upgrade="sudo apt-get upgrade -y"
     alias clean="sudo apt-get clean -y"
     alias autoremove="sudo apt-get autoremove -y"
+
+    # Havoc
+    export QT_QPA_PLATFORM=xcb
 
     # source $HOME/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 fi
@@ -281,3 +303,15 @@ check_tools() {
 
   echo "Tool check complete."
 }
+autoload -U compinit && compinit
+eval "$(register-python-argcomplete --no-defaults exegol)"
+alias exegol='sudo -E /home/dev/.local/bin/exegol'
+
+# opencode
+export PATH=/home/dev/.opencode/bin:$PATH
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+# OpenClaw Completion
+source "/home/dev/.openclaw/completions/openclaw.zsh"
+
+test -e "$HOME/.shellfishrc" && source "$HOME/.shellfishrc"
