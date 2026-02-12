@@ -315,3 +315,7 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 source "/home/dev/.openclaw/completions/openclaw.zsh"
 
 test -e "$HOME/.shellfishrc" && source "$HOME/.shellfishrc"
+
+# opencode
+export PATH=/home/jsoulis/.opencode/bin:$PATH
+alias eva='openclaw tui --url "$(cat ~/.openclaw/.gateway-url)" --token "$(cat ~/.openclaw/.gateway-token)"'
