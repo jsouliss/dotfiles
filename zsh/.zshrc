@@ -136,6 +136,7 @@ alias ....="cd ../../.."
 alias reload="source ~/.zshrc"
 alias zshconfig="nvim ~/.zshrc"
 alias c="clear"
+alias pn="pnpm"
 
 # ============================================
 # ENVIRONMENT VARIABLES
