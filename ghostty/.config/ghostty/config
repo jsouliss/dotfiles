@@ -1,0 +1,34 @@
+# Ghostty Configuration
+# https://ghostty.org/docs/config
+
+# Theme
+theme = catppuccin-mocha
+
+# Font
+font-family = JetBrainsMono Nerd Font
+font-size = 14
+
+# Window
+window-padding-x = 10
+window-padding-y = 10
+window-decoration = auto
+background-opacity = 0.95
+
+# Cursor
+cursor-style = block
+cursor-style-blink = true
+
+# Shell integration
+shell-integration = zsh
+
+# Clipboard
+copy-on-select = clipboard
+
+# Scrollback
+scrollback-limit = 10000
+
+# Keybindings
+keybind = super+t=new_tab
+keybind = super+w=close_surface
+keybind = super+shift+left=previous_tab
+keybind = super+shift+right=next_tab
