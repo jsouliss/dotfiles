@@ -313,7 +313,7 @@ export PATH=/home/dev/.opencode/bin:$PATH
 export PATH="$HOME/.npm-global/bin:$PATH"
 
 # OpenClaw Completion
-source "/home/dev/.openclaw/completions/openclaw.zsh"
+[[ -f ~/.openclaw/completions/openclaw.zsh ]] && source ~/.openclaw/completions/openclaw.zsh
 
 test -e "$HOME/.shellfishrc" && source "$HOME/.shellfishrc"
 
