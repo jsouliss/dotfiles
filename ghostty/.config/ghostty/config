@@ -56,7 +56,7 @@ clipboard-paste-protection = false
 
 # ── Shell ─────────────────────────────────────────────
 shell-integration = zsh
-shell-integration-features = cursor,sudo,title
+shell-integration-features = sudo,title
 
 # ── Scrollback ────────────────────────────────────────
 scrollback-limit = 50000
