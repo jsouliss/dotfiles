@@ -1,3 +1,6 @@
 .DS_Store
 nvim/.DS_Store
 .git-sync.sh
+.claude
+AGENTS.md
+CLAUDE.md
