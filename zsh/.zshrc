@@ -110,7 +110,8 @@ fi
 # SHELL ENHANCEMENTS
 # ============================================
 # Show system info on startup
-fastfetch --kitty-direct .config/kitty/Nerv.png --logo-width 25 --logo-height 15 --logo-padding-top 2 --logo-padding-left 1 --logo-padding-right 1
+# fastfetch --kitty-direct .config/kitty/Nerv.png --logo-width 25 --logo-height 15 --logo-padding-top 2 --logo-padding-left 1 --logo-padding-right 1
+fastfetch 
 
 # Disable autocomplete menus
 setopt NO_AUTO_MENU
@@ -172,6 +173,14 @@ if [[ "$(uname)" == "Darwin" ]]; then
     export PATH="$PATH:$HOME/.local/bin"
     export DYLD_LIBRARY_PATH=/opt/homebrew/lib:$DYLD_LIBRARY_PATH
     export DISPLAY=:0
+    # Added by LM Studio CLI (lms)
+    export PATH="$PATH:$HOME/.lmstudio/bin"
+    # End of LM Studio CLI section
+
+    # bun
+    [ -s "/Users/jerrysolis/.bun/_bun" ] && source "/Users/jerrysolis/.bun/_bun"
+    export BUN_INSTALL="$HOME/.bun"
+    export PATH="$BUN_INSTALL/bin:$PATH"
 
     # ============================================
     # FZF (FUZZY FINDER)
@@ -193,6 +202,11 @@ if [[ "$(uname)" == "Darwin" ]]; then
     if command -v fd &> /dev/null; then 
       # fd (better find)
       alias find="fd"
+    fi
+
+    if command -v brew &> /dev/null; then
+      # updating brew packages alias
+      alias update="brew update && brew upgrade && brew cleanup"
     fi
 
     if command -v grc &> /dev/null; then
@@ -304,12 +318,8 @@ check_tools() {
 
   echo "Tool check complete."
 }
-autoload -U compinit && compinit
 eval "$(register-python-argcomplete --no-defaults exegol)"
-alias exegol='sudo -E /home/dev/.local/bin/exegol'
 
-# opencode
-export PATH=/home/dev/.opencode/bin:$PATH
 export PATH="$HOME/.npm-global/bin:$PATH"
 
 # OpenClaw Completion
@@ -318,5 +328,11 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 test -e "$HOME/.shellfishrc" && source "$HOME/.shellfishrc"
 
 # opencode
-export PATH=/home/jsoulis/.opencode/bin:$PATH
+export PATH=$HOME/.opencode/bin:$PATH
 alias eva='openclaw tui --url "$(cat ~/.openclaw/.gateway-url)" --token "$(cat ~/.openclaw/.gateway-token)"'
+
+alias claude-mem='$HOME/.bun/bin/bun "$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
+export GSETTINGS_SCHEMA_DIR=/opt/homebrew/share/glib-2.0/schemas
+export OLLAMA_HOST=${OLLAMA_HOST:-http://localhost:11434}
+
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
