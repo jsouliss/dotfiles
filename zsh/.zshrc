@@ -331,7 +331,7 @@ test -e "$HOME/.shellfishrc" && source "$HOME/.shellfishrc"
 export PATH=$HOME/.opencode/bin:$PATH
 alias eva='openclaw tui --url "$(cat ~/.openclaw/.gateway-url)" --token "$(cat ~/.openclaw/.gateway-token)"'
 
-alias claude-mem='$HOME/.bun/bin/bun "$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
+alias claude-mem='$HOME/.bun/bin/bun"$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 export GSETTINGS_SCHEMA_DIR=/opt/homebrew/share/glib-2.0/schemas
 export OLLAMA_HOST=${OLLAMA_HOST:-http://localhost:11434}
 
