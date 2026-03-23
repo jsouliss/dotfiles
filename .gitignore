@@ -2,6 +2,7 @@
 nvim/.DS_Store
 .git-sync.sh
 .claude
+docs
 AGENTS.md
 CLAUDE.md
-FIXED.md
+
