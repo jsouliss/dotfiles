@@ -109,9 +109,6 @@ fi
 # ============================================
 # SHELL ENHANCEMENTS
 # ============================================
-# Show system info on startup
-# fastfetch --kitty-direct .config/kitty/Nerv.png --logo-width 25 --logo-height 15 --logo-padding-top 2 --logo-padding-left 1 --logo-padding-right 1
-fastfetch 
 
 # Disable autocomplete menus
 setopt NO_AUTO_MENU
@@ -248,7 +245,6 @@ if [[ "$(uname)" == "Linux" ]]; then
     export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/rustrover/bin"
     export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/webstorm/bin"
     export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/intellij-idea-ultimate/bin"
-    export ZED_ALLOW_EMULATED_GPU=1
 
     # mingw aliases
     alias disassemble="x86_64-w64-mingw32-objdump -rd"
@@ -322,14 +318,10 @@ eval "$(register-python-argcomplete --no-defaults exegol)"
 
 export PATH="$HOME/.npm-global/bin:$PATH"
 
-# OpenClaw Completion
-[[ -f ~/.openclaw/completions/openclaw.zsh ]] && source ~/.openclaw/completions/openclaw.zsh
-
 test -e "$HOME/.shellfishrc" && source "$HOME/.shellfishrc"
 
 # opencode
 export PATH=$HOME/.opencode/bin:$PATH
-alias eva='openclaw tui --url "$(cat ~/.openclaw/.gateway-url)" --token "$(cat ~/.openclaw/.gateway-token)"'
 
 alias claude-mem='$HOME/.bun/bin/bun"$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 export GSETTINGS_SCHEMA_DIR=/opt/homebrew/share/glib-2.0/schemas
