@@ -146,6 +146,9 @@ export VISUAL='nvim'
 # Language environment
 export LANG=en_US.UTF-8
 
+# Java
+export JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
+
 # History settings
 HISTSIZE=10000
 SAVEHIST=10000
