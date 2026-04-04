@@ -178,7 +178,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
     # End of LM Studio CLI section
 
     # bun
-    [ -s "/Users/jerrysolis/.bun/_bun" ] && source "/Users/jerrysolis/.bun/_bun"
+    [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
     export BUN_INSTALL="$HOME/.bun"
     export PATH="$BUN_INSTALL/bin:$PATH"
 
@@ -336,3 +336,4 @@ export GSETTINGS_SCHEMA_DIR=/opt/homebrew/share/glib-2.0/schemas
 export OLLAMA_HOST=${OLLAMA_HOST:-http://localhost:11434}
 
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+export CLAUDE_CODE_NO_FLICKER=1

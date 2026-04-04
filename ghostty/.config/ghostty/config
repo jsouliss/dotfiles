@@ -7,7 +7,7 @@ background-opacity = 1
 
 # ── Font ───────────────────────────────────────────────
 font-family = JetBrainsMono Nerd Font
-font-size = 12
+font-size = 14
 font-thicken = true
 adjust-cell-height = 2
 
