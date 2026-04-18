@@ -352,3 +352,8 @@ export CLAUDE_CODE_NO_FLICKER=1
 if command -v codex &> /dev/null; then
   eval "$(codex completion zsh)"
 fi
+
+# ============================================
+# GitHub OAuth OAuth
+# ============================================
+export GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token 2>/dev/null)"
