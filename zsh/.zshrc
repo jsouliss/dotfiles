@@ -341,3 +341,14 @@ if command -v atuin &> /dev/null; then
 fi
 
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# Trixy — Claude with Discord channel
+alias trixy="claude --channels plugin:discord@claude-plugins-official"
+export CLAUDE_CODE_NO_FLICKER=1
+
+# ============================================
+# Codex
+# ============================================
+if command -v codex &> /dev/null; then
+  eval "$(codex completion zsh)"
+fi

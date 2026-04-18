@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+if ! command -v gitleaks &>/dev/null; then
+    echo "[!] Warning: gitleaks is not installed, skipping secret scan" >&2
+    exit 0
+fi
+gitleaks protect --staged --verbose

@@ -5,6 +5,7 @@
 [core]
     editor = nvim
     pager = delta
+	hooksPath = ~/.config/git/hooks
 
 [delta]
     navigate = true
