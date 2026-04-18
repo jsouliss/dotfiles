@@ -135,6 +135,7 @@ alias reload="source ~/.zshrc"
 alias zshconfig="nvim ~/.zshrc"
 alias c="clear"
 alias pn="pnpm"
+alias pir='pi --tools read,grep,find,ls'
 
 # ============================================
 # ENVIRONMENT VARIABLES
@@ -181,6 +182,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
     [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
     export BUN_INSTALL="$HOME/.bun"
     export PATH="$BUN_INSTALL/bin:$PATH"
+    # MacTeX (pdflatex, etc.)
+    export PATH="/Library/TeX/texbin:$PATH"
 
     # ============================================
     # FZF (FUZZY FINDER)
@@ -329,6 +332,13 @@ export PATH=$HOME/.opencode/bin:$PATH
 alias claude-mem='$HOME/.bun/bin/bun"$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 export GSETTINGS_SCHEMA_DIR=/opt/homebrew/share/glib-2.0/schemas
 export OLLAMA_HOST=${OLLAMA_HOST:-http://localhost:11434}
+
+# ============================================
+# ATUIN (shell history with sync)
+# ============================================
+if command -v atuin &> /dev/null; then 
+  eval "$(atuin init zsh --disable-up-arrow)"
+fi
 
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 export CLAUDE_CODE_NO_FLICKER=1
