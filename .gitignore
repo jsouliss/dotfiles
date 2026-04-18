@@ -6,3 +6,4 @@ docs
 AGENTS.md
 CLAUDE.md
 
+nvim/.config/nvim/lazy-lock.json
