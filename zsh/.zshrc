@@ -329,16 +329,15 @@ test -e "$HOME/.shellfishrc" && source "$HOME/.shellfishrc"
 # opencode
 export PATH=$HOME/.opencode/bin:$PATH
 
-alias claude-mem='$HOME/.bun/bin/bun"$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
 export GSETTINGS_SCHEMA_DIR=/opt/homebrew/share/glib-2.0/schemas
 export OLLAMA_HOST=${OLLAMA_HOST:-http://localhost:11434}
 
 # ============================================
 # ATUIN (shell history with sync)
 # ============================================
-if command -v atuin &> /dev/null; then 
+[[ -f "$HOME/.atuin/bin/env" ]] && . "$HOME/.atuin/bin/env"
+if command -v atuin &> /dev/null; then
   eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
-export CLAUDE_CODE_NO_FLICKER=1
