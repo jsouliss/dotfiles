@@ -1,3 +1,5 @@
+fastfetch 
+
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 export TERM=xterm-256color
 
@@ -194,7 +196,10 @@ if [[ "$(uname)" == "Darwin" ]]; then
     # Modern CLI Tools
     # gvm config 
     unalias cd 2>/dev/null
-    [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
+    # Disabled 2026-08-04: gvm env files pin Go 1.25.5, but Homebrew now ships 1.26.5,
+    # so sourcing only emitted _encode/_decode errors and left GOROOT/GOPATH empty.
+    # Go comes from Homebrew at /opt/homebrew/bin/go. To restore: gvm install go<ver>
+    # [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
 
     # Custom Aliases
     # bat (better cat with syntax highlighting)
@@ -352,8 +357,32 @@ export CLAUDE_CODE_NO_FLICKER=1
 if command -v codex &> /dev/null; then
   eval "$(codex completion zsh)"
 fi
+alias cauto="codex --profile safe-auto"
 
 # ============================================
 # GitHub OAuth OAuth
 # ============================================
 export GITHUB_PERSONAL_ACCESS_TOKEN="$(gh auth token 2>/dev/null)"
+
+# ============================================
+# DO Droplet
+# ============================================
+if [[ "$(uname)" == "Darwin" ]]; then
+  export DIGITALOCEAN_API_TOKEN="$(security find-generic-password -a "$USER" -s DIGITALOCEAN_API_TOKEN -w 2>/dev/null)"
+fi
+
+export PLANNOTATOR_REMOTE=0
+export PLANNOTATOR_PORT=19432
+
+alias claude-mem='bun "/Users/jerrysolis/.claude/plugins/cache/thedotmack/claude-mem/12.3.9/scripts/worker-service.cjs"'
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# ============================================
+# llama-server API key
+# ============================================
+if [[ "$OSTYPE" == darwin* ]]; then
+  export LLAMACPP_API_KEY="$(security find-generic-password -a "$USER" -s LLAMACPP_API_KEY -w 2>/dev/null)"
+else
+  [ -r "$HOME/.config/secrets/env" ] && source "$HOME/.config/secrets/env"
+fi
