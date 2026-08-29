@@ -140,6 +140,118 @@ alias pn="pnpm"
 alias pir='pi --tools read,grep,find,ls'
 
 # ============================================
+# CUSTOM FUNCTIONS
+# ============================================
+# HTB: open the SOCKS tunnel to kali, then drop into an interactive shell
+htb() {
+    if ! lsof -nP -iTCP:1080 -sTCP:LISTEN >/dev/null 2>&1; then
+        ssh -fN -o ConnectTimeout=5 kali-socks || return 1
+    fi
+    ssh -o ClearAllForwardings=yes kali-socks
+}
+
+# Spotify queue automation helpers
+spotify-queue-help() {
+    echo "Spotify queue commands:"
+    echo "  spotify-queue-once        Run one queue maintenance check."
+    echo "  spotify-queue-auto-on     Enable automatic checks every five minutes."
+    echo "  spotify-queue-auto-off    Disable automatic checks."
+    echo "  spotify-queue-auto-status Show whether automatic checks are enabled."
+    echo "  spotify-queue-help        Show this help message."
+    echo ""
+    echo "Each command also supports -h and --help."
+}
+
+spotify-queue-once() {
+    if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+        spotify-queue-help
+        return 0
+    fi
+    if (( $# > 0 )); then
+        echo "Unknown option: $1"
+        echo "Run spotify-queue-help for usage."
+        return 2
+    fi
+
+    (
+        cd "$HOME/Projects/codex-spotify-queue-automation" || exit 1
+        npm run queue
+    )
+}
+
+spotify-queue-auto-on() {
+    if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+        spotify-queue-help
+        return 0
+    fi
+    if (( $# > 0 )); then
+        echo "Unknown option: $1"
+        echo "Run spotify-queue-help for usage."
+        return 2
+    fi
+
+    local launch_domain="gui/$(id -u)"
+    local service_id="${launch_domain}/com.jsoulis.codex-spotify-queue"
+    local plist_path="$HOME/Library/LaunchAgents/com.jsoulis.codex-spotify-queue.plist"
+
+    if launchctl print "$service_id" >/dev/null 2>&1; then
+        echo "Spotify queue automation is already ENABLED and runs every five minutes."
+        return 0
+    fi
+
+    launchctl bootstrap "$launch_domain" "$plist_path" || return 1
+    echo "Spotify queue automation is ENABLED and runs every five minutes."
+}
+
+spotify-queue-auto-off() {
+    if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+        spotify-queue-help
+        return 0
+    fi
+    if (( $# > 0 )); then
+        echo "Unknown option: $1"
+        echo "Run spotify-queue-help for usage."
+        return 2
+    fi
+
+    local launch_domain="gui/$(id -u)"
+    local service_id="${launch_domain}/com.jsoulis.codex-spotify-queue"
+    local plist_path="$HOME/Library/LaunchAgents/com.jsoulis.codex-spotify-queue.plist"
+
+    if ! launchctl print "$service_id" >/dev/null 2>&1; then
+        echo "Spotify queue automation is already DISABLED."
+        return 0
+    fi
+
+    launchctl bootout "$launch_domain" "$plist_path" || return 1
+    echo "Spotify queue automation is DISABLED."
+}
+
+spotify-queue-auto-status() {
+    if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+        spotify-queue-help
+        return 0
+    fi
+    if (( $# > 0 )); then
+        echo "Unknown option: $1"
+        echo "Run spotify-queue-help for usage."
+        return 2
+    fi
+
+    local service_id="gui/$(id -u)/com.jsoulis.codex-spotify-queue"
+
+    if launchctl print "$service_id" >/dev/null 2>&1; then
+        echo "Spotify queue automation is ENABLED and runs every five minutes."
+    else
+        echo "Spotify queue automation is DISABLED."
+    fi
+}
+
+if command -v launchctl >/dev/null 2>&1 && launchctl print "gui/$(id -u)/com.jsoulis.codex-spotify-queue" >/dev/null 2>&1; then
+    echo "Spotify queue automation is ENABLED and runs every five minutes."
+fi
+
+# ============================================
 # ENVIRONMENT VARIABLES
 # ============================================
 # Preferred editor
