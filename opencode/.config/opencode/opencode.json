@@ -1,0 +1,64 @@
+{
+  "model": "llamacpp/unsloth/Qwen3.6-35B-A3B-MTP-GGUF:Q4_K_XL",
+  "small_model": "llamacpp/unsloth/Qwen3.6-35B-A3B-MTP-GGUF:Q4_K_XL",
+  "tools": {
+    "webfetch": false,
+    "websearch": false
+  },
+  "lsp": true,
+  "agent": {
+    "plan": {
+      "permission": { "edit": "deny", "bash": "deny", "webfetch": "deny" }
+    }
+  },
+  "default_agent": "plan",
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "llamacpp": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama-server (5080)",
+      "options": {
+        "baseURL": "http://localhost:8080/v1",
+        "apiKey": "{env:LLAMACPP_API_KEY}"
+      },
+      "models": {
+        "ggml-org/gpt-oss-20b-GGUF:MXFP4": {
+          "name": "gpt-oss-20b (local)",
+          "limit": { "context": 65536, "output": 32768 }
+        },
+        "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:Q4_K_M": {
+          "name": "Qwen3-Coder 30B A3B (local)",
+          "limit": { "context": 65536, "output": 8192 },
+          "options": { "temperature": 0.3 }
+        },
+        "unsloth/Qwen3.6-35B-A3B-MTP-GGUF:Q4_K_XL": {
+          "name": "Qwen3.6 35B A3B (local)",
+          "limit": { "context": 65536, "output": 32768 },
+          "options": { "temperature": 0.6 }
+        }
+      }
+    }
+  },
+  "permission": {
+    "*": "ask",
+    "webfetch": "deny",
+    "websearch": "deny",
+    "edit": "ask",
+    "bash": {
+      "*": "ask",
+      "git status *": "allow",
+      "git diff *": "allow",
+      "grep *": "allow",
+      "git push *": "deny",
+      "rm *": "deny"
+    },
+    "skill": {
+      "*": "allow",
+      "cloudflare*": "deny",
+      "durable-objects": "deny",
+      "turnstile-spin": "deny",
+      "workers-best-practices": "deny",
+      "wrangler": "deny"
+    }
+  }
+}

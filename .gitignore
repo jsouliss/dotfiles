@@ -4,6 +4,7 @@ nvim/.DS_Store
 .claude
 docs
 AGENTS.md
+!opencode/.config/opencode/AGENTS.md
 CLAUDE.md
 
 nvim/.config/nvim/lazy-lock.json
