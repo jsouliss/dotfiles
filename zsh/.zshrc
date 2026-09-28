@@ -457,7 +457,6 @@ if command -v atuin &> /dev/null; then
   eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
-[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 # Trixy — Claude with Discord channel
 alias trixy="claude --channels plugin:discord@claude-plugins-official"
@@ -498,3 +497,4 @@ if [[ "$OSTYPE" == darwin* ]]; then
 else
   [ -r "$HOME/.config/secrets/env" ] && source "$HOME/.config/secrets/env"
 fi
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
