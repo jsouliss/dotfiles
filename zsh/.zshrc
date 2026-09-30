@@ -590,4 +590,5 @@ fi
 
 # Issue 3 tmux crash debug capture - 2026-05-08; logs sink moved to ~/.tmux/logs on 2026-05-12
 tmux() { mkdir -p "${HOME}/.tmux/logs" 2>/dev/null; (cd "${HOME}/.tmux/logs" && command tmux -vv "$@"); }
+export CLAUDE_CODE_NO_FLICKER=1
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
