@@ -1,6 +1,7 @@
 fastfetch 
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+typeset -U path PATH
 export TERM=xterm-256color
 
 # ============================================
@@ -52,10 +53,10 @@ eval "$(register-python-argcomplete pipx)"
 autoload -Uz compinit && compinit
 
 # Docker CLI completions
-fpath=($HOME/.docker/completions $fpath)
+[ -d "$HOME/.docker/completions" ] && fpath=($HOME/.docker/completions $fpath)
 
 # Exegol completions
-eval "$(register-python-argcomplete --no-defaults exegol)"
+command -v exegol &>/dev/null && eval "$(register-python-argcomplete --no-defaults exegol)"
 
 # ============================================
 # THEME & PROMPT
@@ -162,6 +163,69 @@ spotify-queue-help() {
     echo "Each command also supports -h and --help."
 }
 
+# Linux: the same five-minute schedule as the macOS LaunchAgent, as a systemd user timer
+_spotify_queue_linux() {
+    local unit_dir="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
+    local unit="codex-spotify-queue"
+    local project="$HOME/Projects/codex-spotify-queue-automation"
+
+    case "$1" in
+        on)
+            if systemctl --user is-enabled --quiet "$unit.timer" 2>/dev/null &&
+               systemctl --user is-active --quiet "$unit.timer" 2>/dev/null; then
+                echo "Spotify queue automation is already ENABLED and runs every five minutes."
+                return 0
+            fi
+            local wrote=0
+            mkdir -p "$unit_dir" || return 1
+            if [[ ! -f "$unit_dir/$unit.service" ]]; then
+                local npm_bin q_npm q_path q_project
+                npm_bin="$(whence -p npm)" || { echo "npm not found on PATH."; return 1; }
+                [[ -d "$project" ]] || { echo "Missing $project."; return 1; }
+                # systemd rejects quotes and backslashes in an executable path
+                if [[ "$npm_bin$project" == *[\"\\]* ]]; then
+                    echo "Unsupported quote or backslash in the npm or project path."
+                    return 1
+                fi
+                # escape % specifiers; Environment/ExecStart are double-quoted for spaces
+                q_npm="${npm_bin//\%/%%}"
+                q_path="${${npm_bin:h}//\%/%%}:/usr/local/bin:/usr/bin:/bin"
+                q_project="${project//\%/%%}"
+                printf '%s\n' "[Unit]" "Description=Codex Spotify queue maintenance" "" \
+                    "[Service]" "Type=oneshot" "WorkingDirectory=$q_project" \
+                    "Environment=\"PATH=$q_path\"" \
+                    "ExecStart=\"$q_npm\" run queue" > "$unit_dir/$unit.service" || return 1
+                wrote=1
+            fi
+            if [[ ! -f "$unit_dir/$unit.timer" ]]; then
+                printf '%s\n' "[Unit]" "Description=Codex Spotify queue maintenance every five minutes" "" \
+                    "[Timer]" "OnCalendar=*:0/5 America/Los_Angeles" "" \
+                    "[Install]" "WantedBy=timers.target" > "$unit_dir/$unit.timer" || return 1
+                wrote=1
+            fi
+            (( wrote )) && { systemctl --user daemon-reload || return 1; }
+            systemctl --user enable --now "$unit.timer" || return 1
+            echo "Spotify queue automation is ENABLED and runs every five minutes."
+            ;;
+        off)
+            if ! systemctl --user is-enabled --quiet "$unit.timer" 2>/dev/null &&
+               ! systemctl --user is-active --quiet "$unit.timer" 2>/dev/null; then
+                echo "Spotify queue automation is already DISABLED."
+                return 0
+            fi
+            systemctl --user disable --now "$unit.timer" || return 1
+            echo "Spotify queue automation is DISABLED."
+            ;;
+        status)
+            if systemctl --user is-active --quiet "$unit.timer" 2>/dev/null; then
+                echo "Spotify queue automation is ENABLED and runs every five minutes."
+            else
+                echo "Spotify queue automation is DISABLED."
+            fi
+            ;;
+    esac
+}
+
 spotify-queue-once() {
     if [[ "$1" == "-h" || "$1" == "--help" ]]; then
         spotify-queue-help
@@ -189,6 +253,10 @@ spotify-queue-auto-on() {
         echo "Run spotify-queue-help for usage."
         return 2
     fi
+    if [[ "$(uname)" == "Linux" ]]; then
+        _spotify_queue_linux on
+        return
+    fi
 
     local launch_domain="gui/$(id -u)"
     local service_id="${launch_domain}/com.jsoulis.codex-spotify-queue"
@@ -212,6 +280,10 @@ spotify-queue-auto-off() {
         echo "Unknown option: $1"
         echo "Run spotify-queue-help for usage."
         return 2
+    fi
+    if [[ "$(uname)" == "Linux" ]]; then
+        _spotify_queue_linux off
+        return
     fi
 
     local launch_domain="gui/$(id -u)"
@@ -237,6 +309,10 @@ spotify-queue-auto-status() {
         echo "Run spotify-queue-help for usage."
         return 2
     fi
+    if [[ "$(uname)" == "Linux" ]]; then
+        _spotify_queue_linux status
+        return
+    fi
 
     local service_id="gui/$(id -u)/com.jsoulis.codex-spotify-queue"
 
@@ -248,6 +324,8 @@ spotify-queue-auto-status() {
 }
 
 if command -v launchctl >/dev/null 2>&1 && launchctl print "gui/$(id -u)/com.jsoulis.codex-spotify-queue" >/dev/null 2>&1; then
+    echo "Spotify queue automation is ENABLED and runs every five minutes."
+elif command -v systemctl >/dev/null 2>&1 && systemctl --user is-active --quiet codex-spotify-queue.timer 2>/dev/null; then
     echo "Spotify queue automation is ENABLED and runs every five minutes."
 fi
 
@@ -261,8 +339,24 @@ export VISUAL='nvim'
 # Language environment
 export LANG=en_US.UTF-8
 
-# Java
-export JAVA_HOME=/usr/lib/jvm/temurin-17-jdk-amd64
+# Java: keep an inherited JAVA_HOME if it exists, else use the first JDK found; unset if none
+if [[ -z "$JAVA_HOME" || ! -d "$JAVA_HOME" ]]; then
+    JAVA_HOME=""
+    if [[ "$(uname)" == "Darwin" ]]; then
+        JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null)"
+    else
+        for _jdk in /usr/lib/jvm/default-java /usr/lib/jvm/temurin-17-jdk-amd64; do
+            [[ -x "$_jdk/bin/java" ]] && JAVA_HOME="$_jdk" && break
+        done
+        unset _jdk
+        if [[ -z "$JAVA_HOME" ]] && whence -p javac >/dev/null; then
+            _javac="$(readlink -f "$(whence -p javac)" 2>/dev/null)"
+            [[ "$_javac" == /* && -x "${_javac:h:h}/bin/java" ]] && JAVA_HOME="${_javac:h:h}"
+            unset _javac
+        fi
+    fi
+fi
+if [[ -n "$JAVA_HOME" ]]; then export JAVA_HOME; else unset JAVA_HOME; fi
 
 # History settings
 HISTSIZE=10000
@@ -280,7 +374,7 @@ ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
 # MACOS
-if [[ "$(uname)" == "Darwin" ]]; then 
+if [[ "$(uname)" == "Darwin" ]]; then
     # ============================================
     # PATH EXPORTS
     # ============================================
@@ -306,7 +400,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
     eval "$(fzf --zsh)"
 
     # Modern CLI Tools
-    # gvm config 
+    # gvm config
     unalias cd 2>/dev/null
     # Disabled 2026-08-04: gvm env files pin Go 1.25.5, but Homebrew now ships 1.26.5,
     # so sourcing only emitted _encode/_decode errors and left GOROOT/GOPATH empty.
@@ -315,7 +409,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
 
     # Custom Aliases
     # bat (better cat with syntax highlighting)
-    if command -v bat &> /dev/null; then 
+    if command -v bat &> /dev/null; then
       alias cat="bat"
     fi
 
@@ -357,8 +451,7 @@ if [[ "$(uname)" == "Linux" ]]; then
     # Created by `pipx` on 2025-12-05 15:12:54
     export PATH="$PATH:$HOME/.local/bin"
     export PATH="$PATH:$HOME/.local/kitty.app/bin"
-    export JAVA_HOME=/usr/lib/jvm/jdk-25.0.1+8
-    export PATH=$PATH:$JAVA_HOME/bin
+    [[ -n "$JAVA_HOME" ]] && export PATH=$PATH:$JAVA_HOME/bin
 
     # JetBrains ToolBox
     export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/apps/clion/bin"
@@ -437,7 +530,7 @@ check_tools() {
 
   echo "Tool check complete."
 }
-eval "$(register-python-argcomplete --no-defaults exegol)"
+command -v exegol &>/dev/null && eval "$(register-python-argcomplete --no-defaults exegol)"
 
 export PATH="$HOME/.npm-global/bin:$PATH"
 
@@ -457,10 +550,6 @@ if command -v atuin &> /dev/null; then
   eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
-
-# Trixy — Claude with Discord channel
-alias trixy="claude --channels plugin:discord@claude-plugins-official"
-export CLAUDE_CODE_NO_FLICKER=1
 
 # ============================================
 # Codex
@@ -485,7 +574,8 @@ fi
 export PLANNOTATOR_REMOTE=0
 export PLANNOTATOR_PORT=19432
 
-alias claude-mem='bun "/Users/jerrysolis/.claude/plugins/cache/thedotmack/claude-mem/12.3.9/scripts/worker-service.cjs"'
+# claude-mem: resolve current version dynamically so plugin upgrades don't break this alias
+alias claude-mem='bun "$(ls -d $HOME/.claude/plugins/cache/thedotmack/claude-mem/*/scripts/worker-service.cjs 2>/dev/null | sort -V | tail -1)"'
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
@@ -497,4 +587,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
 else
   [ -r "$HOME/.config/secrets/env" ] && source "$HOME/.config/secrets/env"
 fi
+
+# Issue 3 tmux crash debug capture - 2026-05-08; logs sink moved to ~/.tmux/logs on 2026-05-12
+tmux() { mkdir -p "${HOME}/.tmux/logs" 2>/dev/null; (cd "${HOME}/.tmux/logs" && command tmux -vv "$@"); }
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
