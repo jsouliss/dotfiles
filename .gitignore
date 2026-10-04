@@ -2,6 +2,19 @@
 nvim/.DS_Store
 .git-sync.sh
 .claude
+.mcp.json
+# zero-byte mask files the Claude Code sandbox drops into its working directory
+.env.*
+.npmrc
+.yarnrc
+.yarnrc.yml
+.gitmodules
+bunfig.toml
+package.json
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+node_modules/
 docs
 AGENTS.md
 !opencode/.config/opencode/AGENTS.md

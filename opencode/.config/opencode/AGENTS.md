@@ -1,8 +1,11 @@
 # Rules for local models
 
 ## Environment
-- Repos: /mnt/c/Users/Jerry/Projects/ (DSA, WebstormProjects/genesis, LocalLLM, nerv)
-- Shell: zsh on WSL2 Ubuntu 24.04. Node 24, Python 3.12.
+- Repos by host:
+  - DESKTOP-P2MLG2F (WSL2 Ubuntu 24.04): /mnt/c/Users/Jerry/Projects/ (DSA, WebstormProjects/genesis, LocalLLM, nerv)
+  - Genesis (macOS): ~/Projects/
+  - Lazarus (HackberryPi CM5): ~/Projects/
+- Shell: zsh. Node 24, Python 3.12.
 - Package managers: npm for JS, pip for Python. Do not switch tools.
 
 ## Workflow
