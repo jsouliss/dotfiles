@@ -2,6 +2,7 @@
 nvim/.DS_Store
 .git-sync.sh
 .claude
+!/claude/.claude/
 .mcp.json
 # zero-byte mask files the Claude Code sandbox drops into its working directory
 .env.*
@@ -19,6 +20,7 @@ docs
 AGENTS.md
 !opencode/.config/opencode/AGENTS.md
 CLAUDE.md
+!/claude/.claude/CLAUDE.md
 
 nvim/.config/nvim/lazy-lock.json
 *.env
