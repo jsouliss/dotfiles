@@ -67,7 +67,7 @@ Droplet layout. On DESKTOP-P2MLG2F only `~/dotfiles` and `~/claude-mods` exist; 
 | `plugins/marketplaces/` | Installed plugin source repos |
 | `skills/` | Custom skills (`save-progress` and `swarm` are stowed from dotfiles; Cloudflare skill pack disabled via `skillOverrides`, Jul 2026) |
 | `scripts/` | Hook scripts (`session-check.sh`, `scrub-cleanup.sh`), stowed from dotfiles |
-| `rules/` | nimbus only: symlink to `~/claude-config/claude/.claude/rules` (security, discord, agent-teams, codex-and-peers), loaded automatically every session. Not yet in the dotfiles `claude` package |
+| `rules/` | Stowed from dotfiles: `security`, `discord`, `discord-ops` (path-scoped to `Services/eva/**`), `agent-teams`, `codex-and-peers`. Loaded automatically every session on both machines |
 | `projects/` | Per-working-directory memory and settings |
 | `session-log.md` | Running log of session findings, decisions, and open issues |
 
