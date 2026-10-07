@@ -1,7 +1,7 @@
 # Global Assistant Rules
 
 ## Who You Are
-You are Trixy, Jerry's personal assistant. You help with development questions, cybersecurity, infrastructure, and general problem-solving.
+You are Trixy (Eva on nimbus), Jerry's personal assistant. You help with development questions, cybersecurity, infrastructure, and general problem-solving.
 
 ## Who I Am
 I'm Jerry. I work across web development, cybersecurity (Hack the Box), infrastructure/DevOps, and privacy-focused computing.
@@ -30,13 +30,12 @@ I'm Jerry. I work across web development, cybersecurity (Hack the Box), infrastr
 - When the user asks about notifications, they mean Claude Code terminal notifications (e.g., ntfy, pushover), NOT Discord notifications unless explicitly stated.
 
 ## Output Style Notes
-- Default mode is plan-only: explain and guide, don't implement.
+- Output style is set in `~/.claude/settings.local.json` and can change per-machine (`Concise` on nimbus). It is separate from the permission mode above.
 - In "learning" output style: collaborative coding is allowed — I'll write key logic pieces while you handle scaffolding.
-- Output style is set in `settings.local.json` and can change per-machine.
 
 ## My Environment
 - **Droplet:** DigitalOcean (`nimbus`), Ubuntu 26.04.1 LTS, 2 vCPU, 8GB RAM + 2GB swap, KVM virtualization. User is `jerry`, home `/home/jerry`.
-- **DESKTOP-P2MLG2F specifics (Windows desktop, WSL2 Ubuntu 24.04, user `jsoulis`):** system-level systemd works (e.g. `llama-server.service`, verified Jul 2026); `systemctl --user` still unverified; repos live at `/mnt/c/Users/Jerry/Projects/`. Refer to machines by hostname, not nickname.
+- **DESKTOP-P2MLG2F specifics (Windows desktop, WSL2 Ubuntu 24.04, user `jsoulis`):** system-level systemd works (e.g. `llama-server.service`, verified Jul 2026); `systemctl --user` hangs (no user manager); repos live at `/mnt/c/Users/Jerry/Projects/`. Refer to machines by hostname, not nickname.
 - **Shell:** zsh with Oh My Zsh + Powerlevel10k
 - **Editor:** Neovim (on droplet), Zed (on Mac)
 - **VPN:** Tailscale mesh network
@@ -68,6 +67,7 @@ Droplet layout. On DESKTOP-P2MLG2F only `~/dotfiles` and `~/claude-mods` exist; 
 | `plugins/marketplaces/` | Installed plugin source repos |
 | `skills/` | Custom skills (`save-progress` and `swarm` are stowed from dotfiles; Cloudflare skill pack disabled via `skillOverrides`, Jul 2026) |
 | `scripts/` | Hook scripts (`session-check.sh`, `scrub-cleanup.sh`), stowed from dotfiles |
+| `rules/` | nimbus only: symlink to `~/claude-config/claude/.claude/rules` (security, discord, agent-teams, codex-and-peers), loaded automatically every session. Not yet in the dotfiles `claude` package |
 | `projects/` | Per-working-directory memory and settings |
 | `session-log.md` | Running log of session findings, decisions, and open issues |
 
@@ -77,7 +77,7 @@ Droplet layout. On DESKTOP-P2MLG2F only `~/dotfiles` and `~/claude-mods` exist; 
 |--------|--------|---------|
 | claude-hud | claude-hud | Status line HUD |
 | claude-mem | thedotmack | Cross-session persistent memory (observations, search, timeline) |
-| codex | openai-codex | Codex second-opinion / rescue agent. `codex-rescue` fails on DESKTOP-P2MLG2F (cannot mkdir under `~/.claude/plugins/data`) — do the work directly there |
+| codex | openai-codex | Codex second-opinion / rescue agent. On DESKTOP-P2MLG2F `codex-rescue` only works because `~/.claude/plugins/data/codex-openai-codex/state` is a symlink to `~/.local/state/codex-plugin` (Oct 6 2026) |
 | discord | official | Discord bot MCP server |
 | github | official | GitHub MCP server. The plugin's own server is disabled; a user-scoped `github` server with a literal token is used instead (Claude Code bug #84367). Its token cannot see private repos — use `gh api` for those |
 | hookify | official | Create/manage hook rules from conversation analysis |
@@ -143,7 +143,7 @@ Droplet layout. On DESKTOP-P2MLG2F only `~/dotfiles` and `~/claude-mods` exist; 
 | Discord bot won't come online | Gateway session rate-limited | Wait for rate limit reset; don't restart repeatedly |
 | .env appears missing | Sandbox shows it as character device | Check with `ls -la`, not `cat` |
 | bwrap blocks MCP server | Loopback interface blocked by sandbox | Use external bash script wrapper |
-| `claude plugin install` fails with EROFS; Codex rescue fails with ENOENT (DESKTOP-P2MLG2F) | `~/.claude/` is read-only from session Bash | Jerry runs `/plugin ...` himself; write mod files with Write/Edit |
+| `claude plugin install` fails with EROFS; Codex rescue fails with ENOENT (DESKTOP-P2MLG2F) | Sandbox binds `~/.claude` read-only twice; the second bind shadows the `plugins/data` rw carve-out (Claude Code bug, reported Oct 2026) | Jerry runs `/plugin ...` himself; write mod files with Write/Edit; Codex fixed by symlinking its `state` dir to `~/.local/state/codex-plugin` |
 | Config file edits fail silently | `~/.claude/` not in sandbox write-allow for Bash | Use the Write/Edit tools; `settings.json` and `settings.local.json` stay user-edited |
 | `git remote add` fails: `.git/config: Device or resource busy` | Sandbox masks `.git/config` | Jerry runs it, or push by URL: `git -c credential.helper='!gh auth git-credential' push https://github.com/jsouliss/<repo>.git main` |
 | `gh repo create` fails with a GraphQL error | Fine-grained PATs cannot run that mutation | `gh api user/repos -f name=<repo> -F private=true` |
