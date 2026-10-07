@@ -35,26 +35,27 @@ I'm Jerry. I work across web development, cybersecurity (Hack the Box), infrastr
 - Output style is set in `settings.local.json` and can change per-machine.
 
 ## My Environment
-- **Droplet:** DigitalOcean ("nimbus"), Ubuntu 24.04 LTS, 4GB RAM + 2GB swap, KVM virtualization
-- **Eden specifics (WSL2):** system-level systemd works (e.g. `llama-server.service`, verified Jul 2026); `systemctl --user` still unverified; repos live at `/mnt/c/Users/Jerry/Projects/`
+- **Droplet:** DigitalOcean (`nimbus`), Ubuntu 26.04.1 LTS, 2 vCPU, 8GB RAM + 2GB swap, KVM virtualization. User is `jerry`, home `/home/jerry`.
+- **DESKTOP-P2MLG2F specifics (Windows desktop, WSL2 Ubuntu 24.04, user `jsoulis`):** system-level systemd works (e.g. `llama-server.service`, verified Jul 2026); `systemctl --user` still unverified; repos live at `/mnt/c/Users/Jerry/Projects/`. Refer to machines by hostname, not nickname.
 - **Shell:** zsh with Oh My Zsh + Powerlevel10k
 - **Editor:** Neovim (on droplet), Zed (on Mac)
 - **VPN:** Tailscale mesh network
-- **Devices:** Windows desktop (Eden), M1 MacBook (Genesis), HackberryPi CM5 (Lazarus), iPhone (Enoch)
+- **Devices:** Windows desktop (DESKTOP-P2MLG2F), M1 MacBook (Genesis), iPhone (Enoch). The HackberryPi CM5 (Lazarus) is shelved — leave it out of multi-host configs.
 - **Key tools:** Node 24, Python 3.12, GNU Stow 2.3, gh CLI 2.45, Neovim 0.11
 
 ## Workspace Layout
 
 | Directory | Purpose | Notes |
 |-----------|---------|-------|
-| `~/Projects/` | Active repos (DSA, genesis, Playground) | Sandbox write-allowed |
-| `~/Magi/` | Infrastructure workspace with Discord cron scripts | Has its own CLAUDE.md; sandbox write-allowed |
-| `~/dotfiles/` | GNU Stow-managed configs (nvim, zsh, tmux, p10k, git, ghostty, kitty) | `bootstrap.sh` in progress |
-| `~/claude-config/` | Claude Code config repo | `~/.claude/rules/` symlinks here |
+| `~/Projects/` | Active repos (DSA, genesis, Playground, claude-mods) | nimbus only; sandbox write-allowed |
+| `~/Services/` | nimbus services repo (`jsouliss/nimbus`, private): monitor, dsa-daily, claude-md-drift-auditor, shared user units, `system/` snapshot of root units. `eva/` and `job-sweep/` live inside it but are their own repos | nimbus only; `~/.config/systemd/user/` units are symlinks into it, so deploy = `git pull` + `systemctl --user daemon-reload` |
+| `~/Magi/` | Infrastructure docs workspace | nimbus only; has its own CLAUDE.md; sandbox write-allowed |
+| `~/dotfiles/` | GNU Stow-managed configs (nvim, zsh, tmux, p10k, git, ghostty, kitty, opencode, claude) | the `claude` package provides `~/.claude/CLAUDE.md`, `skills/save-progress`, `skills/swarm`, `scripts/` on every machine; `bootstrap.sh` in progress |
+| `~/claude-mods/` | Claude Code mods (`jsouliss/claude-mods`, private; marketplace name `claude-code-playground-mods`) | DESKTOP-P2MLG2F path; on nimbus it is `~/Projects/claude-mods` |
 
 `~/Magi/Projects/` contains symlinks to `~/Projects/` repos — not copies.
 
-Droplet layout. On Eden only `~/dotfiles` exists; `~/Projects`, `~/Magi`, and `~/claude-config` are absent — active repos are at `/mnt/c/Users/Jerry/Projects/` (DSA, WebstormProjects/genesis, LocalLLM, nerv).
+Droplet layout. On DESKTOP-P2MLG2F only `~/dotfiles` and `~/claude-mods` exist; `~/Projects`, `~/Services`, and `~/Magi` are absent — active repos are at `/mnt/c/Users/Jerry/Projects/` (DSA, WebstormProjects/genesis, LocalLLM, nerv).
 
 ## Claude Code Config (`~/.claude/`)
 
@@ -62,43 +63,47 @@ Droplet layout. On Eden only `~/dotfiles` exists; `~/Projects`, `~/Magi`, and `~
 |------|---------|
 | `settings.json` | Permissions, sandbox, hooks, plugins, env vars |
 | `settings.local.json` | Per-machine overrides (output style, extra allow rules) |
-| `CLAUDE.md` | This file — global instructions loaded every session |
+| `CLAUDE.md` | This file — global instructions loaded every session. Stow symlink to `~/dotfiles/claude/.claude/CLAUDE.md`; edit it there and commit |
 | `channels/discord/` | Discord bot config (`access.json`, `.env`, token) |
 | `plugins/marketplaces/` | Installed plugin source repos |
-| `skills/` | Custom skills (`save-progress` active; Cloudflare skill pack disabled via `skillOverrides`, Jul 2026) |
-| `scripts/` | Hook scripts (`session-check.sh`) |
-| `rules/` | Symlink → `~/claude-config/claude/.claude/rules` (droplet only — absent on Eden) |
+| `skills/` | Custom skills (`save-progress` and `swarm` are stowed from dotfiles; Cloudflare skill pack disabled via `skillOverrides`, Jul 2026) |
+| `scripts/` | Hook scripts (`session-check.sh`, `scrub-cleanup.sh`), stowed from dotfiles |
 | `projects/` | Per-working-directory memory and settings |
 | `session-log.md` | Running log of session findings, decisions, and open issues |
 
-### Active Plugins (as of Jul 2026)
+### Active Plugins (as of Oct 2026)
 
 | Plugin | Source | Purpose |
 |--------|--------|---------|
 | claude-hud | claude-hud | Status line HUD |
 | claude-mem | thedotmack | Cross-session persistent memory (observations, search, timeline) |
-| codex | openai-codex | Codex second-opinion / rescue agent |
+| codex | openai-codex | Codex second-opinion / rescue agent. `codex-rescue` fails on DESKTOP-P2MLG2F (cannot mkdir under `~/.claude/plugins/data`) — do the work directly there |
 | discord | official | Discord bot MCP server |
-| github | official | GitHub MCP server |
+| github | official | GitHub MCP server. The plugin's own server is disabled; a user-scoped `github` server with a literal token is used instead (Claude Code bug #84367). Its token cannot see private repos — use `gh api` for those |
 | hookify | official | Create/manage hook rules from conversation analysis |
 | pyright-lsp | official | Python language server |
 | typescript-lsp | official | TypeScript language server |
 | warp | claude-code-warp | Warp terminal integration |
+| code-improver | trailofbits | Review-and-fix workflow |
+| next-steps | claude-community | Suggested next steps after a turn |
+| prompt-rail | oikon48 | Prompt line mod |
+| md-prompt | nogu66 | Markdown prompt mod |
+| token-weather, agent-board | claude-code-playground-mods (`~/claude-mods`) | Context-window forecast line; live subagent pane (`/agent-board`) |
 
 ### Sandbox Constraints
-- **Write-allowed:** `/tmp`, `~/Projects`, `~/Magi` only. Everything else (including `~/.claude/`) requires user action.
-- **Network-allowed:** `discord.com`, `gateway.discord.gg`, `cdn.discordapp.com`, `firecrawl.dev`, `api.upstash.io`, `api.openai.com`, `api.anthropic.com`
-- **Denied reads:** `~/.ssh/`, `~/.claude/.credentials.json`
-- **Denied tools:** Write, Edit, `rm`, `mv`, `cp`, `chmod`, `chown`, `sudo`, `apt`, `pip`, `npm`, `curl`, `wget`
+- **Write-allowed:** `/tmp`, `~/Projects`, `~/Magi`, `~/.claude/plugins/data`, `~/.config/systemd/user`, `~/.local/state/codex-plugin`, plus the session's working directory. On DESKTOP-P2MLG2F `~/.claude/` is read-only from Bash even unsandboxed — write there with the Write/Edit tools.
+- **Network-allowed:** `code.claude.com`, `discord.com`, `gateway.discord.gg`, `cdn.discordapp.com`, `firecrawl.dev`, `api.upstash.io`, `api.openai.com`, `api.anthropic.com`, `api.search.brave.com`
+- **Denied reads:** `~/.ssh/`, `~/.claude/.credentials.json`, `~/.claude/secrets.env`, `~/.gnupg/`, `~/.netrc`, `~/.docker/config.json`, `~/.kube/config`
+- **Denied Bash commands:** `rm`, `mv`, `cp`, `chmod`, `chown`, `sudo`, `apt`, `pip`, `npm`, `curl`, `wget`, `bash`/`sh`/`zsh`/`fish`, `ssh`/`scp`/`sftp`, `gh auth *`, `git push --force`, `git reset --hard`, `git clean -f`, `kill`, `systemctl --user stop|restart`. Write and Edit are allowed (see How I Work).
 
 ## Common Commands
 - `cat /tmp/session-health.md` — Session health report (generated on start by `session-check.sh`)
 - `cat ~/.claude/session-log.md` — Review session history and open issues
 - `tailscale status` — Check mesh network connectivity
-- `free -h` — Quick RAM check (2GB constraint)
+- `free -h` — Quick RAM check (8GB on nimbus)
 - `ls /tmp/claude-*.sock 2>/dev/null | wc -l` — Count active Claude sessions (divide by 2)
 - `ls -la ~/.claude/channels/discord/` — Verify Discord bot config exists and is accessible
-- `systemctl --user list-timers` — Check user-level scheduled tasks (droplet only — hangs on Eden)
+- `systemctl --user list-timers` — Check user-level scheduled tasks (nimbus only — hangs on DESKTOP-P2MLG2F)
 
 ## Security Rules
 - Never touch the `.ssh` directory.
@@ -128,7 +133,7 @@ Droplet layout. On Eden only `~/dotfiles` exists; `~/Projects`, `~/Magi`, and `~
 
 ## Scheduling & Timers
 - All cron jobs and scheduled tasks must use explicit timezone (America/Los_Angeles Pacific) — never assume UTC. Prefer systemd timers with timezone awareness over cron when possible.
-- Automated Discord scripts live in per-project repos under `~/Projects/` — see `~/Magi/CLAUDE.md` for schedule and channel details.
+- Automated Discord scripts and their timers live in `~/Services` on nimbus (repo `jsouliss/nimbus`; its README lists every service and schedule). Healthchecks ping URLs and Discord webhooks are never in the repo — they are read at runtime from `~/.config/nimbus/webhook-config.sh` and `~/.config/webhooks/webhook-lib.sh`. `~/Magi/CLAUDE.md` holds the channel docs.
 
 ## Known Issues
 
@@ -138,7 +143,10 @@ Droplet layout. On Eden only `~/dotfiles` exists; `~/Projects`, `~/Magi`, and `~
 | Discord bot won't come online | Gateway session rate-limited | Wait for rate limit reset; don't restart repeatedly |
 | .env appears missing | Sandbox shows it as character device | Check with `ls -la`, not `cat` |
 | bwrap blocks MCP server | Loopback interface blocked by sandbox | Use external bash script wrapper |
-| Write/Edit tools blocked | Denied in settings.json (plan-mode) | Guide user through changes instead |
-| Config file edits fail silently | `~/.claude/` not in sandbox write-allow | User must edit config files manually |
+| `claude plugin install` fails with EROFS; Codex rescue fails with ENOENT (DESKTOP-P2MLG2F) | `~/.claude/` is read-only from session Bash | Jerry runs `/plugin ...` himself; write mod files with Write/Edit |
+| Config file edits fail silently | `~/.claude/` not in sandbox write-allow for Bash | Use the Write/Edit tools; `settings.json` and `settings.local.json` stay user-edited |
+| `git remote add` fails: `.git/config: Device or resource busy` | Sandbox masks `.git/config` | Jerry runs it, or push by URL: `git -c credential.helper='!gh auth git-credential' push https://github.com/jsouliss/<repo>.git main` |
+| `gh repo create` fails with a GraphQL error | Fine-grained PATs cannot run that mutation | `gh api user/repos -f name=<repo> -F private=true` |
 | Codex MCP server disconnects mid-session | second-opinion MCP server crashed or timed out | Run `/mcp` to reconnect, or restart Claude Code; don't blame prompt size first |
 | Every Bash call fails with `bwrap: Can't create file at /home/.mcp.json` | Deny-mask mountpoints missing in root-owned dirs | `sudo touch /home/.mcp.json /.mcp.json` from a terminal outside Claude Code |
+| `git log` on nimbus: `cannot run delta` | dotfiles git config sets `core.pager = delta`, not installed there | Install delta on nimbus or `git config --global core.pager less` |
