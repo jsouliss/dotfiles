@@ -136,4 +136,3 @@ Droplet layout. On DESKTOP-P2MLG2F only `~/dotfiles` and `~/claude-mods` exist; 
 | `gh repo create` fails with a GraphQL error | Fine-grained PATs cannot run that mutation | `gh api user/repos -f name=<repo> -F private=true` |
 | Codex MCP server disconnects mid-session | second-opinion MCP server crashed or timed out | Run `/mcp` to reconnect, or restart Claude Code; don't blame prompt size first |
 | Every Bash call fails with `bwrap: Can't create file at /home/.mcp.json` | Deny-mask mountpoints missing in root-owned dirs | `sudo touch /home/.mcp.json /.mcp.json` from a terminal outside Claude Code |
-| `git log` on nimbus: `cannot run delta` | dotfiles git config sets `core.pager = delta`, not installed there | Install delta on nimbus or `git config --global core.pager less` |
