@@ -92,9 +92,11 @@ else
     echo "| Open issues | $PASS | All clear |" >> "$REPORT"
 fi
 
-# 9. DR doc staleness check
+# 9. DR doc staleness check (nimbus-only — ~/Magi does not exist on other hosts)
 DR_DOC="$HOME/Magi/docs/runbooks/nimbus-disaster-recovery.md"
-if [ -f "$DR_DOC" ]; then
+if [ "$(hostname)" != "nimbus" ]; then
+    echo "| DR doc | $PASS | Skipped — nimbus-only check |" >> "$REPORT"
+elif [ -f "$DR_DOC" ]; then
     LAST_COMMIT=$(git -C "$HOME/Magi" log -1 --format="%ct" -- docs/runbooks/nimbus-disaster-recovery.md 2>/dev/null)
     if [ -n "$LAST_COMMIT" ]; then
         NOW=$(date +%s)
