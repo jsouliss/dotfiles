@@ -79,11 +79,6 @@ if command -v eza &> /dev/null; then
   alias tree="eza --tree"
 fi
 
-if command -v zoxide &> /dev/null; then 
-  # zoxide (better cd with frecency)
-  eval "$(zoxide init zsh --cmd cd)"
-fi
-
 if command -v rg &> /dev/null; then 
   # ripgrep (better grep)
   alias grep="rg"
@@ -590,3 +585,8 @@ fi
 
 export CLAUDE_CODE_NO_FLICKER=1
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+if command -v zoxide &> /dev/null; then
+  # zoxide (better cd with frecency); must stay last, after anything that defines cd or hooks
+  eval "$(zoxide init zsh --cmd cd)"
+fi
