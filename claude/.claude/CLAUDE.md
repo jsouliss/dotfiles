@@ -40,7 +40,7 @@ I'm Jerry. I work across web development, cybersecurity (Hack the Box), infrastr
 - **Editor:** Neovim (on droplet), Zed (on Mac)
 - **VPN:** Tailscale mesh network
 - **Devices:** Windows desktop (DESKTOP-P2MLG2F), M1 MacBook (Genesis), iPhone (Enoch). The HackberryPi CM5 (Lazarus) is shelved — leave it out of multi-host configs.
-- **Key tools:** Node 24, Python 3.12, GNU Stow 2.3, gh CLI 2.45, Neovim 0.11
+- **Key tools:** Node 24, Python 3.14, GNU Stow 2.4, gh CLI 2.46, Neovim 0.11
 
 ## Workspace Layout
 
@@ -51,8 +51,6 @@ I'm Jerry. I work across web development, cybersecurity (Hack the Box), infrastr
 | `~/Magi/` | Infrastructure docs workspace | nimbus only; has its own CLAUDE.md; sandbox write-allowed |
 | `~/dotfiles/` | GNU Stow-managed configs (nvim, zsh, tmux, p10k, git, ghostty, kitty, opencode, claude) | the `claude` package provides `~/.claude/CLAUDE.md`, `skills/save-progress`, `skills/swarm`, `scripts/` on every machine; `bootstrap.sh` in progress |
 | `~/claude-mods/` | Claude Code mods (`jsouliss/claude-mods`, private; marketplace name `claude-code-playground-mods`) | DESKTOP-P2MLG2F path; on nimbus it is `~/Projects/claude-mods` |
-
-`~/Magi/Projects/` contains symlinks to `~/Projects/` repos — not copies.
 
 Droplet layout. On DESKTOP-P2MLG2F only `~/dotfiles` and `~/claude-mods` exist; `~/Projects`, `~/Services`, and `~/Magi` are absent — active repos are at `/mnt/c/Users/Jerry/Projects/` (DSA, WebstormProjects/genesis, LocalLLM, nerv).
 
