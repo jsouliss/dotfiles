@@ -35,3 +35,7 @@ Policy source: memory `feedback_multi_round_qc`. Runtime:
 Show Jerry Codex's findings verbatim, then fix what he approves (a terse "proceed" = fix the critical/high/medium items).
 Keep a running file in the scratchpad: round, finding, severity, fixed / declined + reason. Never write DONE until the last
 change has an APPROVED round.
+
+**At the cap:** fixes made after the final capped round get one verify-only pass (`adversarial-review` told to confirm
+only those fixes, report nothing new, and end APPROVED / NOT APPROVED). It does not count toward the cap. Its APPROVED
+satisfies the DONE gate. If it rejects a fix, do not write DONE: report the open item to Jerry and stop.
