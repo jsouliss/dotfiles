@@ -34,6 +34,11 @@ DARWIN_PACKAGES=(
   kitty-config
 )
 
+# nimbus-only Claude skills
+NIMBUS_PACKAGES=(
+  claude-nimbus
+)
+
 RECOMMENDED_COMMANDS=(stow git zsh tmux nvim)
 
 INSTALL=0
@@ -296,6 +301,9 @@ else
     kali) PACKAGES+=("${KALI_PACKAGES[@]}") ;;
     darwin) PACKAGES+=("${DARWIN_PACKAGES[@]}") ;;
     *) warn "Unknown OS '$OS', stowing common packages only" ;;
+  esac
+  case "$(hostname -s)" in
+    nimbus) PACKAGES+=("${NIMBUS_PACKAGES[@]}") ;;
   esac
 fi
 [ "${#PACKAGES[@]}" -gt 0 ] || die "No packages to stow"

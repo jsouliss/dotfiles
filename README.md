@@ -18,6 +18,7 @@ cd ~/dotfiles
 # Create backups if they do or delete 
 # There is also a merge option will include later
 stow nvim tmux wezterm ...
+# On nimbus only, also stow claude-nimbus (job-sweep and nimbus-audit skills)
 ```
 
 
