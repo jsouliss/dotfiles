@@ -35,11 +35,6 @@
           "name": "Qwen3.6 35B A3B (local)",
           "limit": { "context": 65536, "output": 32768 },
           "options": { "temperature": 0.6 }
-        },
-        "Accio-Lab/occamy-1.0-GGUF:Q4_K_M": {
-          "name": "Occamy 1.0 35B A3B (local)",
-          "limit": { "context": 65536, "output": 32768 },
-          "options": { "temperature": 0.6 }
         }
       }
     }
