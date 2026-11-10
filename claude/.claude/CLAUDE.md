@@ -78,11 +78,11 @@ Droplet layout. On DESKTOP-P2MLG2F only `~/dotfiles` and `~/claude-mods` exist; 
 | codex | openai-codex | Codex second-opinion / rescue agent. On DESKTOP-P2MLG2F `codex-rescue` only works because `~/.claude/plugins/data/codex-openai-codex/state` is a symlink to `~/.local/state/codex-plugin` (Oct 6 2026) |
 | discord | official | Discord bot MCP server |
 | github | official | GitHub MCP server. The plugin's own server is disabled; a user-scoped `github` server with a literal token is used instead (Claude Code bug #84367). Its token cannot see private repos — use `gh api` for those |
-| hookify | official | Create/manage hook rules from conversation analysis |
-| pyright-lsp | official | Python language server |
-| typescript-lsp | official | TypeScript language server |
+| hookify | official | Create/manage hook rules from conversation analysis. DESKTOP-P2MLG2F only; disabled on nimbus |
+| pyright-lsp | official | Python language server. DESKTOP-P2MLG2F only; disabled on nimbus |
+| typescript-lsp | official | TypeScript language server. DESKTOP-P2MLG2F only; disabled on nimbus |
 | warp | claude-code-warp | Warp terminal integration |
-| code-improver | trailofbits | Review-and-fix workflow |
+| code-improver | trailofbits | Review-and-fix workflow. DESKTOP-P2MLG2F only; disabled on nimbus |
 | next-steps | claude-community | Suggested next steps after a turn |
 | prompt-rail | oikon48 | Prompt line mod |
 | md-prompt | nogu66 | Markdown prompt mod |
