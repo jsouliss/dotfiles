@@ -87,6 +87,7 @@ Droplet layout. On DESKTOP-P2MLG2F only `~/dotfiles` and `~/claude-mods` exist; 
 | prompt-rail | oikon48 | Prompt line mod |
 | md-prompt | nogu66 | Markdown prompt mod |
 | token-weather, agent-board | claude-code-playground-mods (`~/claude-mods`) | Context-window forecast line; live subagent pane (`/agent-board`) |
+| tokyo-night | claude-code-playground-mods (`~/claude-mods`) | Tokyo Night look for the desktop and mobile apps (dark only). DESKTOP-P2MLG2F only |
 
 ### Sandbox Constraints
 - **Write-allowed:** `/tmp`, `~/Projects`, `~/Magi`, `~/.claude/plugins/data`, `~/.config/systemd/user`, `~/.local/state/codex-plugin`, plus the session's working directory. On DESKTOP-P2MLG2F `~/.claude/` is read-only from Bash even unsandboxed — write there with the Write/Edit tools.
